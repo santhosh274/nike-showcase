@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
@@ -15,11 +15,18 @@ export default function JordanModel({ scrollProgress }) {
   const { scene } = useGLTF('/models/jordan_1.glb')
   const group = useRef()
   const { camera } = useThree()
+  const [error, setError] = useState(null)
   
   const targetPosition = useRef(new THREE.Vector3(5, 2, 7))
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0))
   const currentShoeRotation = useRef(0)
-  
+
+  useEffect(() => {
+    if (!scene) {
+      setError('Model failed to load')
+    }
+  }, [scene])
+
   useFrame(() => {
     const offset = scrollProgress || 0
     const segment = offset * (cameraKeyframes.length - 1)
@@ -66,14 +73,16 @@ export default function JordanModel({ scrollProgress }) {
     }
   })
 
-  const clonedScene = useMemo(() => scene.clone(true), [scene])
-  
+  if (error) {
+    return null
+  }
+
   return (
     <group ref={group}>
       <primitive 
-        object={clonedScene} 
-        scale={0.2} 
-        position={[0, -0.5, 0]} 
+        object={scene.clone()} 
+        scale={0.1} 
+        position={[0, 0, 0]} 
       />
     </group>
   )

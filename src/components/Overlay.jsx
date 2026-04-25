@@ -43,11 +43,13 @@ const sections = [
   },
 ]
 
-export default function Overlay({ scrollProgress }) {
+export default function Overlay({ scrollProgress, theme }) {
   const [displayIdx, setDisplayIdx] = useState(0)
   const [isChanging, setIsChanging] = useState(false)
   const [swooshProgress, setSwooshProgress] = useState(0)
   const offset = scrollProgress || 0
+
+  const swooshSrc = theme === 'dark' ? '/nike-swoosh-white.png' : '/nike-swoosh-black.png'
 
   useEffect(() => {
     if (offset >= 0.75) {
@@ -125,7 +127,7 @@ export default function Overlay({ scrollProgress }) {
         className="swoosh-reveal"
         style={{ '--progress': swooshProgress }}
       >
-        <img src="/nike-swoosh.png" alt="Nike Swoosh" className="swoosh-img" />
+        <img src={swooshSrc} alt="Nike Swoosh" className="swoosh-img" />
       </div>
 
       <div className="nav-dots">
@@ -137,6 +139,17 @@ export default function Overlay({ scrollProgress }) {
       <div className="progress-track">
         <div className="progress-fill" style={{ height: `${offset * 100}%` }} />
       </div>
+
+      {offset > 0.999 && (
+        <div className={`final-cta ${theme}`}>
+          <div className="cta-content">
+            <img src={swooshSrc} alt="Nike Swoosh" className="cta-swoosh" />
+            <a href="https://apollodesign.vercel.app/" target="_blank" rel="noopener noreferrer" className="cta-link">
+              made by <span className="cta-brand">apollodesign.sv</span>
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

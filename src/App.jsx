@@ -1,44 +1,52 @@
 import { useState, useEffect, useRef } from 'react'
+import Lenis from 'lenis'
 import CanvasContainer from './components/CanvasContainer'
 import Overlay from './components/Overlay'
 
 function App() {
   const [scrollProgress, setScrollProgress] = useState(0)
-  const cursorRef = useRef(null)
-  const cursorRingRef = useRef(null)
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      smoothWheel: true,
+    })
+
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+    requestAnimationFrame(raf)
+
     const handleScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-      const progress = maxScroll > 0 ? window.scrollY / maxScroll : 0
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      const progress = max > 0 ? lenis.scroll / max : 0
       setScrollProgress(Math.min(1, Math.max(0, progress)))
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (cursorRef.current) {
-        cursorRef.current.style.left = e.clientX + 'px'
-        cursorRef.current.style.top = e.clientY + 'px'
-      }
-      if (cursorRingRef.current) {
-        cursorRingRef.current.style.left = e.clientX + 'px'
-        cursorRingRef.current.style.top = e.clientY + 'px'
-      }
-    }
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    lenis.on('scroll', handleScroll)
+    return () => lenis.destroy()
   }, [])
 
   return (
     <>
-      <div ref={cursorRef} className="cursor" />
-      <div ref={cursorRingRef} className="cursor-ring" />
-      <CanvasContainer scrollProgress={scrollProgress} />
-      <Overlay scrollProgress={scrollProgress} />
+      <button 
+        className="theme-toggle" 
+        onClick={() => setTheme(t => t === 'dark' ? 'light' : 'dark')}
+        aria-label="Toggle theme"
+      >
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+      
+      <CanvasContainer scrollProgress={scrollProgress} theme={theme} />
+      <Overlay scrollProgress={scrollProgress} theme={theme} />
       <div className="scroll-spacer" />
     </>
   )
