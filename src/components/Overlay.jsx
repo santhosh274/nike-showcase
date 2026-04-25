@@ -81,9 +81,8 @@ export default function Overlay({ scrollProgress, theme }) {
 
   return (
     <div className="overlay-wrapper">
-      <div className="brand-mark">
-        <span className="brand-name">NIKE</span>
-        <span className="brand-line" />
+      <div className={`brand-mark ${theme}`}>
+        <img src={swooshSrc} alt="Nike" className="brand-logo" />
       </div>
 
       <div className={`content-block ${isChanging ? 'changing' : ''}`}>

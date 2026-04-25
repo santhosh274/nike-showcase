@@ -177,22 +177,20 @@ body::after {
   top: 28px;
   left: 28px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 6px;
   z-index: 100;
 }
 
-.brand-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 0.55em;
-  color: var(--text-color);
+.brand-logo {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
-.brand-line {
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--red), transparent);
+.brand-mark.light .brand-logo {
+  filter: brightness(0);
 }
 
 .content-block {
