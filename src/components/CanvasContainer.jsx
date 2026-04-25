@@ -7,8 +7,8 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 const cameraKeyframes = [
-  { pos: [4, 4, 7], look: [0, -0.3, 0], shoeRotation: 0 },
-  { pos: [-5, 1, -3], look: [0, 0, 0], shoeRotation: 0 },
+  { pos: [2, 4, 7], look: [0, -0.3, 0], shoeRotation: 0 },
+  { pos: [-7, 1, -3], look: [0, 0, 0], shoeRotation: 0 },
   { pos: [0, -4, 5], look: [0, -0.5, 0], shoeRotation: 0 },
   { pos: [5, 2, 8], look: [0, 0, 0], shoeRotation: Math.PI * 2 },
   { pos: [0, 8, 8], look: [0, 0, 0], shoeRotation: Math.PI * 2 }
